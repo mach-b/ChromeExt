@@ -1,0 +1,21 @@
+{
+  "name": "Browser Trust",
+  "description": "Hashes content",
+  "version": "0.1",
+  "permissions": [
+    "debugger", "tabs", "<all_urls>"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": true
+  },
+  "icons": {
+    "defaultButton": "defaultButton.png",
+    "alertButton": "alertButton.png"
+  },
+  "browser_action": {
+    "default_icon": "defaultButton.png",
+    "default_title": "Browser Trust"
+  },
+  "manifest_version": 2
+}

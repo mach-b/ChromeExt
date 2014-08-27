@@ -1,0 +1,57 @@
+RequireJS
+
+"RequireJS is a JavaScript file and module loader.
+It is optimized for in-browser use,
+but it can be used in other JavaScript environments,
+like Rhino and Node.
+Using a modular script loader like RequireJS
+will improve the speed and quality of your code."
+
+
+COMPATABLE WITH:
+...
+Chrome 3+
+Firefox 2+
+...
+
+Get from: http://requirejs.org/docs/download.html
+There is a minified and commented version,
+and a plugins etc.
+
+ADD TO THE PROJECT:
+Assuming all JavaScript files in a "scripts" directory,
+add require.js to scripts directory.
+
+e.g.
+projectDir/
+    project.html
+    scripts/
+        main.js
+        require.js
+        somethingelse.js
+        helper/
+            util.js
+
+RequireJS recommends keeping all inline code out of the HTML.
+Only reference require.js with a require call to load the script.
+e.g.
+<script data-main="scripts/main" src="scripts/require.js"></script>
+
+
+USE:
+"Inside of main.js you can use require() to load any scripts
+you need to run.  This ensures a single entry point, since the
+data-main  script you specify is loaded asynchronously.""
+
+require(["helper/util"], function(util) {
+    //This function is called when scripts/helper/util.js is loaded.
+    //If util.js calls define(), then this function is not fired until
+    //util's dependencies have loaded, and the util argument will hold
+    //the module value for "helper/util".
+});
+
+That will load the helper/util.js script. To get full advantage of RequireJS, see the API docs to learn more about defining and using modules.
+
+see:
+- http://requirejs.org/docs/api.html#data-main
+- http://requirejs.org/docs/api.html
