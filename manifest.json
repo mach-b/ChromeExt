@@ -6,8 +6,10 @@
     "debugger", "tabs", "<all_urls>"
   ],
   "background": {
-    "scripts": ["background.js"],
-    "persistent": true
+    "scripts": ["background.js", "scripts/BTrust.js",
+    "scripts/Engine.js", "scripts/HelloWorld.js", "scripts/HttpHelper.js",
+    "scripts/JSONHandler.js", "scripts/Server.js", "scripts/Storage.js"],
+    "persistent": false
   },
   "icons": {
     "defaultButton": "defaultButton.png",
