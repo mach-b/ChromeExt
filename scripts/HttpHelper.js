@@ -20,7 +20,7 @@ BrowserTrust.HttpHelper = {
         xmlHttp.open( "GET", theUrl, false );
         xmlHttp.send( null );
         return xmlHttp.responseText;
-    }
+    };
 
     function httpPost(theUrl, theMessage)
     {
@@ -29,7 +29,7 @@ BrowserTrust.HttpHelper = {
         var params = theMessage;  // ??? message pre formatted ????
         //var params = "fingerprint="+theMessage;
         http.open("POST", theUrl, true);
-        http.setRequestHeader("Content-type", "text/plain") 
+        http.setRequestHeader("Content-type", "text/plain")
         http.setRequestHeader("Content-length", theMessage.length);
         http.setRequestHeader("Connection", "close");
         http.onreadystatechange = function() { //Call a function when the state changes.
@@ -40,4 +40,4 @@ BrowserTrust.HttpHelper = {
         http.send(params);
     }
 
-}
+};

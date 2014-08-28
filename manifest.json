@@ -9,7 +9,7 @@
     "scripts": ["background.js", "scripts/BTrust.js",
     "scripts/Engine.js", "scripts/HelloWorld.js", "scripts/HttpHelper.js",
     "scripts/JSONHandler.js", "scripts/Server.js", "scripts/Storage.js"],
-    "persistent": false
+    "persistent": true
   },
   "icons": {
     "defaultButton": "defaultButton.png",

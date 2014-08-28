@@ -5,15 +5,21 @@
 // var backgroundWindow = chrome.windows.create(
 //    {url: "background.html?" + tabId, type: "popup", width: 800, height: 600});
 
+console.log("Logger.");
+alert("This is an Alert!");
+
 chrome.browserAction.onClicked.addListener(function(tab) {
   chrome.debugger.attach({tabId:tab.id}, version,
       onAttach.bind(null, tab.id));
 });
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
+
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if (changeInfo.status === 'complete') {
       chrome.tabs.executeScript(tabId, {
-        backgroundWindow.
+        console.log("Logger.");
+        alert("This is an Alert!");
       })
   }
 });
@@ -26,15 +32,15 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
 //     }
 // );
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
-    if (changeInfo.status === 'complete') {
-        chrome.tabs.executeScript(tabId, {
-            code: ' if (document.body.innerText.indexOf("Cat") !=-1) {' +
-                  '     alert("Cat not found!");' +
-                  ' }'
-        });
-    }
-});
+// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+//     if (changeInfo.status === 'complete') {
+//         chrome.tabs.executeScript(tabId, {
+//             code: ' if (document.body.innerText.indexOf("Cat") !=-1) {' +
+//                   '     alert("Cat not found!");' +
+//                   ' }'
+//         });
+//     }
+// });
 
 chrome.runtime.onMessage.addListener(function callback)
 
