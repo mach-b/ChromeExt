@@ -18,9 +18,9 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if (changeInfo.status === 'complete') {
       chrome.tabs.executeScript(tabId, {
-        console.log("Logger.");
-        alert("This is an Alert!");
-      })
+        //console.log("Logger.");
+        //alert("This is an Alert!");
+      });
   }
 });
 
@@ -42,7 +42,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 //     }
 // });
 
-chrome.runtime.onMessage.addListener(function callback)
+//chrome.runtime.onMessage.addListener(function callback);
 
 var version = "1.0";
 
@@ -62,4 +62,4 @@ chrome.browserAction.setIcon({path: 'alertButton.png'});
 
 //  chrome.windows.create(
 //      {url: "background.html?" + tabId, type: "popup", width: 800, height: 600});
-}
+//}
