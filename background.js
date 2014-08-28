@@ -8,22 +8,31 @@
 console.log("Logger.");
 alert("This is an Alert!");
 
-chrome.browserAction.onClicked.addListener(function(tab) {
-  chrome.debugger.attach({tabId:tab.id}, version,
-      onAttach.bind(null, tab.id));
+// chrome.browserAction.onClicked.addListener(function(tab) {
+//   chrome.debugger.attach({tabId:tab.id}, version,
+//       onAttach.bind(null, tab.id));
+// });
+
+
+
+// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+//   if (changeInfo.status === 'complete') {
+//       chrome.tabs.executeScript(tabId, {
+//         // //console.log("Logger.");
+//         // //alert("This is an Alert!");
+//         // code: 'console.log("listener logger.");'
+//       });
+//   }
+// });
+
+// chrome.tabs.getCurrent(function(tab){
+//         console.log("URL: "+tab.url);
+//     }
+// );
+
+chrome.tabs.query({currentWindow: true, active: true}, function(tabs){
+    console.log("URL alternate method: "+tabs[0].url);
 });
-
-
-
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  if (changeInfo.status === 'complete') {
-      chrome.tabs.executeScript(tabId, {
-        //console.log("Logger.");
-        //alert("This is an Alert!");
-      });
-  }
-});
-
 
 // chrome.extension.onRequest.addListener(
 //     function doStuff(request){
@@ -57,7 +66,7 @@ var version = "1.0";
 //   }
 
 
-chrome.browserAction.setIcon({path: 'alertButton.png'});
+//chrome.browserAction.setIcon({path: 'alertButton.png'});
 
 
 //  chrome.windows.create(
