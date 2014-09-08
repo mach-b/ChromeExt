@@ -14,6 +14,32 @@ alert("This is an Alert!");
 // });
 
 
+chrome.runtime.addListener(function (request, sender, sendResponse)) {
+  if(request.action == "show") {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+      chrome.pageAction.show(tabs[0].id);
+    });
+  }
+}
+
+// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+//
+// });
+//
+// chrome.tabs.onCreated.addListener(function(tabId, changeInfo, tab) {
+//
+// });
+
+// function onRequest(request, sender, sendResponse)
+// {
+//   console.log("onRequest()");
+//   alert(request);
+//   chrome.browserAction.
+//   sendResponse("test response");
+// }
+
+chrome.extension.onRequest.addListener(onRequest);
+
 
 // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 //   if (changeInfo.status === 'complete') {
