@@ -1,6 +1,6 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /*  			Browser Trust Fingerprint Engine | (c) Browser Trust 2014					      */
-/*										Version 1.0												  */
+/*										Version 1.1												  */
 /* 							this version has not been tested 									  */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
@@ -9,10 +9,12 @@
  */
 if ("undefined" == typeof(BrowserTrust)) {
   var BrowserTrust = {};
-};
+}
 
 BrowserTrust.Engine = 
 {
+	processedFingerprints : [],
+	
 	/**
 	 * Method that creates a fingerprint object given a uri and string data to fingerprint
 	 * 
@@ -23,7 +25,8 @@ BrowserTrust.Engine =
 	fingerprint : function(uri, data) {
 		var fingerprint = {
 			hash:Sha256.hash(data, false),
-			uri	:uri
+			uri	:uri,
+			result : 0
 		};
 		return fingerprint;
 	},
@@ -51,7 +54,94 @@ BrowserTrust.Engine =
 	 */
 	getWindowDocument : function() 
 	{
-	    return window.content.document;
+            return window.content.document;
+	},
+	
+	/**
+	 * Compare fingerprints locally for a given fingerprint. If the fingerprint 
+	 * should be excluded, the result is 1
+	 * 
+	 * @param {Fingerprint} fingerprint to compare
+	 * @return {float} the percentage of similatiry in the last 20 fingerprints
+	 */
+	compareFingerprint : function(fingerprint) 
+	{
+		return BrowserTrust.Engine.compareFingerprintLocal(fingerprint);
+	},
+	
+	/**
+	 * Compare fingerprints locally for a given fingerprint. If the fingerprint 
+	 * should be excluded, the result is 1
+	 * 
+	 * @param {Fingerprint} fingerprint to compare
+	 * @return {float} the percentage of similatiry in the last 20 fingerprints
+	 */
+	compareFingerprintLocal : function(fingerprint) 
+	{
+		//Case if the page is to be excluded, return 1
+		var excluded = BrowserTrust.Storage.isUriDynamic(fingerprint.uri);
+		if (excluded) {
+			return 1;
+		}
+		//Case look through history
+		var history = BrowserTrust.Storage.getFingerprints(fingerprint);
+		var matching = 0;
+		for (var i in history) {
+			matching += history[i].hash == fingerprint.hash ? 1 : 0;
+		}
+		return matching/history.length;
+	},
+	
+	/**
+	 * Compare fingerprints locally for a given fingerprint. If the fingerprint 
+	 * should be excluded, the result is 1
+	 * 
+	 * @param {Fingerprint} fingerprint to compare
+	 * @return {float} the percentage of similatiry in the last 20 fingerprints
+	 */
+	compareFingerprintRemote : function(fingerprint) 
+	{
+		//Case if the page is to be excluded, return 1
+		var excluded = BrowserTrust.Storage.isUriDynamic(fingerprint.uri);
+		if (excluded) {
+			return 1;
+		}
+		//Case look through history
+		var json = BrowserTrust.Server.getFingerprints(fingerprint);
+		var matching = 0;
+		for (var i in history) {
+			matching += history[i].hash == fingerprint.hash ? 1 : 0;
+		}
+		return matching/history.length;
+	},
+	
+	/**
+	 * Compares the local fingerprint history to the current
+	 * fingerprint to calculate a % of similarity
+	 * 
+	 * @returns a float 0-1 to show the percentage of similarity 
+	 */
+	compareFinderprintHtml : function()
+	{
+		var fingerprint = BrowserTrust.Engine.fingerprintHtml();
+		var result = BrowserTrust.Engine.compareFingerprint(fingerprint);
+		return result;
+	},
+	
+	/**
+	 * Generates a fingerprint from the input then checks that against the data
+	 * stored to determine the fingerprints similarity with others
+	 * 
+	 * @param {String} uri of the data
+	 * @param {String} data the string of data to be fingerprinted
+	 * @return {fingerprint} the resulting fingerprint
+	 */
+	fingerprintAndCompare : function(uri, data) 
+	{
+		var fingerprint = BrowserTrust.Engine.fingerprint(uri, data);
+		var localresult = BrowserTrust.Engine.compareFingerprint(fingerprint);
+		fingerprint.localresult = localresult;
+		return fingerprint;
 	},
 	
 	/**
@@ -65,7 +155,7 @@ BrowserTrust.Engine =
 	breakDownNodes : function(node, parentName, trustFile) 
 	{
 		var result = "";
-		for (var childNode = node.firstChild; childNode != null; childNode = childNode.nextSibling)
+		for (var childNode = node.firstChild; childNode !== null; childNode = childNode.nextSibling)
 		{	
 			var nodeName = parentName + "." + childNode.tagName;
 			if (BTEngine.shouldFingerprint(nodeName, trustFile)) 
@@ -105,5 +195,19 @@ BrowserTrust.Engine =
 		}
 		
 		return !shouldIgnore;
+	},
+	
+	/**
+	 * Process the listeners data from the tracers array
+	 */
+	processListenerTracers : function() 
+	{
+		while(BrowserTrust.Listeners.tracers.length > 0)
+		{
+			var tracer = BrowserTrust.Listeners.tracers.pop();
+			var fingerprint = BrowserTrust.Engine.fingerprintAndCompare(tracer.getURL(), tracer.getAllData());
+			BrowserTrust.Engine.processedFingerprints.push(fingerprint);
+			BrowserTrust.Storage.storeFingerprint(fingerprint);
+		}
 	}
 };

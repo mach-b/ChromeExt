@@ -1,30 +1,31 @@
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
-/*              Browser Trust JSON Handler | (c) Browser Trust 2014                      */
+/*              Browser Trust Server Communications | (c) Browser Trust 2014                      */
 /*                                   Version 1.0                                                  */
 /*                         this version has not been tested                                       */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
-// /**
-//  * BrowserTrust namespace.
-//  */
-// if (BrowserTrust === "undefined") {
-//   var BrowserTrust = {};
-// };
-//
-// BrowserTrust.JSONHandler = {
+/**
+ * BrowserTrust namespace.
+ */
+if (BrowserTrust === "undefined") {
+  var BrowserTrust = {};
+};
+
+BrowserTrust.JSONHandler = 
+{
     /**
      * Is the Key already present in the JSON.
      * @param {Object} json
      * @param {String} key
      * @return {boolean}  indicating success
      */
-    function isKeyPresent(json, key) {
+    isKeyPresent : function(json, key) {
         "use strict";
         if (json.hasOwnProperty(key)) {
             return true;
         }
         return false;
-    }
+    },
 
     /**
      * Establishes if Key references an Array.
@@ -32,10 +33,10 @@
      * @param {String} key
      * @return {boolean}  indicating yes or no.
      */
-    function doesKeyReferToArray(json, key) {
+    doesKeyReferToArray : function(json, key) {
         "use strict";
         return (json[key] instanceof Array);
-    }
+    },
 
     /**
      * Adds a Key Value pair (object) to an Array.
@@ -44,7 +45,7 @@
      * @param {String} value
      * @return {boolean} indicating success
      */
-    function addValueToArray(json, key, value) {// Could omit paramaters, but makes clearer and allows reuse.
+    addValueToArray : function(json, key, value) {// Could omit paramaters, but makes clearer and allows reuse.
         "use strict";
         if (json[key] instanceof Array) {
             var obj = {};
@@ -53,14 +54,14 @@
             return true;
         }
         return false;
-    }
+    },
 
     /**
      * Converts a Key Value pair into the first entry in an array referenced by that Key in the JSON.
      * @param {Object} json
      * @param {String} key
      */
-    function convertKeyToObjectArray(json, key) {
+    convertKeyToObjectArray : function(json, key) {
         "use strict";
         if (!(json[key] instanceof Array)) {
             var obj = {};
@@ -69,7 +70,7 @@
             return true;
         }
         return false;
-    }
+    },
 
     /**
      * Inserts a key and value into a JSON object.
@@ -78,7 +79,7 @@
      * @param {String} value
      * @return {boolean} indicating success
      */
-    function insertValue(json, key, value) {
+    insertValue : function(json, key, value){
         "use strict";
         if (!(typeof key === "string")) {
             return false;
@@ -88,14 +89,14 @@
         }
         if (isKeyPresent(json, key)) {
             if (doesKeyReferToArray(json, key)) {
-                return addValueToArray(json, key, value);
+                return BrowserTrust.JSONHandler.addValueToArray(json, key, value);
             }
-            convertKeyToObjectArray(json, key);
-            return addValueToArray(json, key, value);
+            BrowserTrust.JSONHandler.convertKeyToObjectArray(json, key);
+            return BrowserTrust.JSONHandler.addValueToArray(json, key, value);
         }
         json[key] = value;
         return true;
-    }
+    },
 
     /**
      * Compares Two JSON Objects.
@@ -103,14 +104,14 @@
      * @param {Object} jsonB - The reference object.
      * @return {Object} - A JSON containing the values that did not match the reference object.
      */
-    function compareJSONs(jsonA, jsonB) {
+    compareJSONs : function(jsonA, jsonB) {
         "use strict";
         var matchedValueInArray, i, j, key, failedMatchesJSON = {};
         for (key in jsonA) {
             if (jsonA.hasOwnProperty(key)) {
                 if (!(jsonA[key] instanceof Array)) {
                     if (!(jsonA[key] === jsonB[key])) {
-                        insertValue(failedMatchesJSON, key, jsonA[key]);
+                        BrowserTrust.JSONHandler.insertValue(failedMatchesJSON, key, jsonA[key]);
                     }
                 } else {
                     matchedValueInArray = false;
@@ -123,7 +124,7 @@
                             }
                         }
                         if (matchedValueInArray === false) {
-                            insertValue(failedMatchesJSON, key, jsonA[key][i][key]);
+                            BrowserTrust.JSONHandler.insertValue(failedMatchesJSON, key, jsonA[key][i][key]);
                         }
                     }
                 }
@@ -133,4 +134,4 @@
         return failedMatchesJSON;
     }
 
-// };
+};

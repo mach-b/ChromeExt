@@ -6,8 +6,9 @@
 //console.log('contentScript.js called');
 
 //Sending a request from a content script looks like this:
-chrome.runtime.sendMessage({"greeting": "hello"}, function(response) {
+chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
   console.log(response.farewell);
+  alert("*"+response.farewell);
 });
 
 // On the receiving end, you need to set up an runtime.onMessage event listener
@@ -19,4 +20,13 @@ chrome.runtime.onMessage.addListener(
                 "from the extension");
     if (request.greeting == "hello")
       sendResponse({farewell: "goodbye"});
+});
+
+
+var fingerprint = {}; //url: "hash"
+//BrowserTrust.JSONHandler.insertValue(fingerprint, "url", "hash");
+insertValue(fingerprint, "url", "hash");
+chrome.runtime.sendMessage(fingerprint, function(response) {
+  console.log(response.confirmation);
+  alert("#"+response.farewell);
 });

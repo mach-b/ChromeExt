@@ -19,10 +19,10 @@ BrowserTrust.Server = {
 	 * @param {String} Calculated Hash of the URL
 	 * @return {Boolean} true if successfully submitted
 	 */
-	submitFingerPrint : function(url, hash)
+	submitFingerprint : function(url, hash)
 	{
 	    var params = "url=" + encodeURIComponent(url) + "&hash=" + encodeURIComponent(hash);
-	    request.open("POST", "http://103.250.233.28:8765/url", true);
+	    request.open("POST", "http://203.86.204.34:8765/url", true);
 	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    request.setRequestHeader("Content-length", params.length);
 	    request.setRequestHeader("Connection", "close");
@@ -45,10 +45,10 @@ BrowserTrust.Server = {
 	 * @param {String} URL to Submit
 	 * @return {String} JSON Response if Successful
 	 */
-	getFingerPrints : function(url)
+	getFingerprints : function(url)
 	{
 		var params = "";
-	    request.open("GET", "http://103.250.233.28:8765/url/" + url, true);
+	    request.open("GET", "http://203.86.204.34:8765/url/" + url, true);
 	    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	    request.setRequestHeader("Content-length", params.length);
 	    request.setRequestHeader("Connection", "close");
