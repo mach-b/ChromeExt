@@ -22,7 +22,8 @@
       "matches": ["http://*/*"],
       "js": ["contentScript.js", "scripts/BTrust.js",
       "scripts/Engine.js", "scripts/HelloWorld.js", "scripts/HttpHelper.js",
-      "scripts/JSONHandler.js", "scripts/Server.js", "scripts/Storage.js"]
+      "scripts/JSONHandler.js", "scripts/Server.js", "scripts/Storage.js",
+      "scripts/sidebar.js", "scripts/iFrame.js"]
     }
   ],
   "manifest_version": 2
